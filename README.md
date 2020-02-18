@@ -1,10 +1,13 @@
+Ветка Snoop Termux (Android)
+===========================
+
 ## Snoop Project один из самых заточенных OSINT-инструментов по СНГ локации
 
 <img src="https://raw.githubusercontent.com/snooppr/snoop/master/images/snoop.png" />
 
 Snoop Project — это форк Sherlock Project-a и он разыскивает никнеймы в публичных данных.
 
-##Ветка Snoop termux
+
 Ветка Snoop GNU/Linux
 смотри 
 https://github.com/snooppr/snoop

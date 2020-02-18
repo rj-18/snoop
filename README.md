@@ -23,13 +23,13 @@ https://raw.githubusercontent.com/snooppr/snoop/master/changelog.txt
 
 ```bash
 # Работа Snoop на Android-е
-Войти в домашнюю папку Termux (т.е. прсото открыть Termux)
+Войти в домашнюю папку Termux (т.е. просто открыть Termux)
 $ termux-setup-storage
-$ cd /data/data/com.termux/files/home #дефолтный каталог
+$ cd /data/data/com.termux/files/home #дефолтный/домашний каталог
 
 # Клонировать репозиторий Snoop ветку Termux
 # (Если флешкa FAT — она не пойдет!
-В таком случае, клонировать репозиторий только в Домашнюю дирректорию Termux)
+#В таком случае, клонировать репозиторий только в Домашнюю дирректорию Termux)
 $ git clone https://github.com/snooppr/snoop -b termux
 
 # Войти в рабочий каталог
@@ -52,7 +52,7 @@ $ git config --global user.email "you@example.com"
 $ git config --global user.name "username"
 $ python3 snoop.py --update y
 ```
-**Эта урезанная версия Project Snoop работает на Android/Termux**
+**Эта урезанная версия Project Snoop, которая работает на Android/Termux**
 
 ## Использование
 

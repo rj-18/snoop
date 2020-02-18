@@ -4,39 +4,52 @@
 
 Snoop Project — это форк Sherlock Project-a и он разыскивает никнеймы в публичных данных.
 
+##Ветка Snoop termux
+Ветка Snoop GNU/Linux
+смотри 
+https://github.com/snooppr/snoop
+
 Различия смотри
 https://raw.githubusercontent.com/snooppr/snoop/master/changelog.txt
 
-**В базе 348 сайтов, база постоянно расширяется**
+**В базе 347 сайтов, база постоянно расширяется**
 
-## Установка
+## Установка Snoop на Android/Termux
 
 **Примечание**: Требуемая версия python 3.6 и выше.
 
 ```bash
-# Клонировать репозиторий
-$ git clone https://github.com/snooppr/snoop
+# Работа Snoop на Android-е
+Войти в домашнюю папку Termux (т.е. прсото открыть Termux)
+$ termux-setup-storage
+$ cd /data/data/com.termux/files/home #дефолтный каталог
+
+# Клонировать репозиторий Snoop ветку Termux
+# (Если флешкa FAT — она не пойдет!
+В таком случае, клонировать репозиторий только в Домашнюю дирректорию Termux)
+$ git clone https://github.com/snooppr/snoop -b termux
 
 # Войти в рабочий каталог
 $ cd ~/snoop
 
 # Установить python3 и python3-pip, если они не установлены
-$ apt-get update && apt-get install python3
-
-# Установить зависимости 'requirements'
-$ python3 -m pip install -r requirements.txt
-
-# Работа Snoop на Android-е
-#В Termux доставить "libcrypt & Python3" 
 $ apt update && pkg upgrade && pkg install python libcrypt
 #Возможно, нужно будет доставить ещё: libxml2; libxslt; и clang [Комментарий с Habr-a QtRoS]
+
+
+# Установить зависимости 'requirements'
+$ pip install --upgrade pip
+$ python3 -m pip install -r requirements.txt
+# Либо установить все зависимости из 'requirements.txt' в ручную через
+$ pip3 install module
+
 
 # Чтобы иметь возможность обновлять Snoop на Android/Termux
 $ git config --global user.email "you@example.com"
 $ git config --global user.name "username"
 $ python3 snoop.py --update y
 ```
-Project Snoop работает на OS GNU/Linux & Android/Termux (На OS Windows доступен лишь частичный кривой функционал). 
+**Эта урезанная версия Project Snoop работает на Android/Termux**
 
 ## Использование
 
@@ -106,7 +119,7 @@ optional arguments:
                         значение при хорошем интернет соединении и нескольких
                         'упавших' сайтов = 9с.
   --print-found         Выводить на печать только найденные аккаунты
-  --no-color            Монохромный терминал, не использовать цвета в url
+  --no-color, -n        Монохромный терминал, не использовать цвета в url
   --list all            Вывод на дисплей БД поддерживаемых сайтов
   --update Y            Обновить Snoop
 ```
@@ -123,7 +136,6 @@ python3 snoop.py username1 username2 username3
 
 Найденные учетные записи будут храниться в отдельном текстовом файле с соответствующим именем username1.txt...
 
-<img src="https://raw.githubusercontent.com/snooppr/snoop/master/images/Run.gif"/>
 
 ## Основные ошибки ложно-положительного отклика при поиске
 Cайт изменил свой ответ.
@@ -133,26 +145,3 @@ Cайт изменил свой ответ.
 В некоторых случаях недопустимое username.
 Проблемы с openssl на стороне сервера (использование старой базы кода).
 Некоторые сайты временно недоступны, например, технические работы.
-
-
-**Например**
-
-Если вы постоянно (*Debian) получаете "ошибку соединения" на этих ресурсах:
-
-[GipsysTeam;
-RamblerDating;
-Mamochki;
-и т.д.]
-
-Решение следующее (проверенное):
-```bash
-$ sudo nano /etc/ssl/openssl.cnf
-
-# Изменить в самом низу файла строки:
-[CipherString = DEFAULT @ SECLEVEL = 2]
-
-на
-
-[CipherString = DEFAULT @ SECLEVEL = 1]
-```
-https://wiki.debian.org/ContinuousIntegration/TriagingTips/openssl-1.1.1

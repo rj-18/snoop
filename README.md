@@ -51,6 +51,7 @@ $ pip3 install module
 $ git config --global user.email "you@example.com"
 $ git config --global user.name "username"
 $ python3 snoop.py --update y
+# E-mail и username можно указывать любое/выдуманное (для обновления Snoop этого достаточно).
 ```
 **Эта урезанная версия Project Snoop, которая работает на Android/Termux**
 

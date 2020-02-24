@@ -16,6 +16,8 @@ from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from concurrent.futures import ThreadPoolExecutor
 from time import time
 
+from pathlib import *
+
 import requests
 from colorama import Fore, Style, init
 
@@ -27,7 +29,8 @@ from load_proxies import load_proxies_from_csv, check_proxy_list
 
 if sys.platform == 'win32':
     locale.setlocale(locale.LC_ALL, '')
-    init()
+
+init(autoreset=True)
     
 print ("""
   ___|                          
@@ -39,13 +42,15 @@ _____/ _|  _|\___/ \___/  .__/
 
 print ("#Пример:\n cd ~/snoop\n python3 snoop.py -h \033[37m#справка по всем функциям ПО\033[0m\n" + 
 " python3 snoop.py --time 9 user \033[37m#поиск user-a, ожидание ответа от сайта ≤ 9с.\033[0m\n" + 
-" nano results/user.txt или open results/user.html \033[37m#открыть сохранённые результаты поиска\033[0m\n")
+" открыть 'results/user.txt/.html/.csv' \033[37m#открыть сохранённые результаты поиска\033[0m\n")
 
 
 module_name = "Snoop: поиск никнейма по всем фронтам!"
 __version__ = "1.1.0_rus Ветка Android/Termux"
 
 date = datetime.datetime.today()
+
+dirresults = Path.cwd()
 
 global proxy_list
 
@@ -420,7 +425,7 @@ def timeout_check(value):
         raise ArgumentTypeError(f"Timeout '{value}' must be greater than 0.0s.")
     return timeout
 
-#Обновление Snoop
+
 #Обновление Snoop
 def update_snoop():
     upd = str(input("""Вы действительно хотите: 
@@ -432,14 +437,15 @@ def update_snoop():
     if upd == "y":
         if sys.platform == 'win32':
             locale.setlocale(locale.LC_ALL, '')
-            print("\033[31mФункция обновления Snoop не поддерживается на OS Windows\033[0m")
-        os.system("./update.sh")
+            print(Fore.RED + "Функция обновления Snoop требует установки <Git> на OS Windows")
+            os.startfile("update.bat")
+        else:
+            print(Fore.RED + "Функция обновления Snoop требует установки <Git> на OS GNU/Linux")
+            os.system("./update.sh")
 
                
 def main():
-    # Colorama module's initialization.
-    init(autoreset=True)
-    
+
     with open('COPYRIGHT', 'r', encoding="utf8") as copyright:
         cop = copyright.read()
 
@@ -458,7 +464,7 @@ def main():
 ├──BTC_BHC: \033[37m1EXoQj1rd5oi54k9yynVLsR4kG61e4s8g3\033[0m
 ├──Яндекс.Деньги: \033[37m4100111364257544\033[0m  
 └──PayPal: \033[37msnoopproject@protonmail.com\033[0m    
-\nИсходный код: \033[37mhttps://github.com/snooppr/snoop\033[0m                """)
+\nИсходный код: \033[37mhttps://github.com/snooppr/snoop\033[0m """)
               
                 
                 
@@ -534,9 +540,11 @@ def main():
                         action="store_true", dest="print_found_only", default=False,
                         help="Выводить на печать только найденные аккаунты"
                         )
-    parser.add_argument("--no-color", "-n",
+    parser.add_argument("--no-func", "-n",
                         action="store_true", dest="no_color", default=False,
-                        help="Монохромный терминал, не использовать цвета в url"                            
+                        help="""✓Монохромный терминал, не использовать цвета в url\n
+                                ✓Отключить звук\n
+                                ✓Запретить открытие web browser-a"""
                         )                        
     parser.add_argument("username",
                         nargs='+', metavar='USERNAMES',
@@ -554,13 +562,17 @@ def main():
 
     args = parser.parse_args()
     
-    if args.sort: 
-        subprocess.run(["python3", "site_list.py"])
+    if args.sort:
+        if sys.platform == 'win32':
+            locale.setlocale(locale.LC_ALL, '')
+            subprocess.run(["python", "site_list.py"])
+        else:
+            subprocess.run(["python3", "site_list.py"])
         exit(0)
     
     if args.listing:
         listall = []
-        with open('sites.md') as listyes:
+        with open('sites.md', "r", encoding="utf8") as listyes:
             for site in listyes.readlines():
                 patch = (site.split(']')[0]).replace("[", "  ") 
                 listall.append(patch)
@@ -568,7 +580,7 @@ def main():
 
     if args.listing:
         listall_bad = []                
-        with open('bad_site.md') as listbad:
+        with open('bad_site.md', "r", encoding="utf8") as listbad:
             for site_bad in listbad.readlines():
                 patch_bad = (site_bad.split(']')[0]).replace("[", "  ") 
                 listall_bad.append(patch_bad)
@@ -808,9 +820,12 @@ def main():
                                      results[site]['http_status'],
                                      results[site]['response_time_ms']
                                      ]
-                                    )                                    
-  #  if args.no_color==False:
- #       playsound('end.wav')
+                                    )
+                                            
+    if args.no_color==False:
+        if exists_counter >= 1:
+            webbrowser.open(str("file://" + str(dirresults) + "/results/" + str(username) + ".html"))
+        #playsound('end.wav')
                     
 if __name__ == "__main__":
     main()
